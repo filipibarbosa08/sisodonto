@@ -278,6 +278,8 @@
     <script src="../assets/js/bootstrap-datetimepicker.min.js"></script>
     <script src="../assets/js/app.js"></script>
     <script src="../assets/js/jquery.mask.min.js"></script>
+    <script src="../assets/js/utils.js"></script>
+
 
     <script>
 

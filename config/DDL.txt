@@ -1,0 +1,180 @@
+-- odonto.agendamentos definição
+
+CREATE TABLE `agendamentos` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nome_paciente` varchar(255) NOT NULL,
+  `procedimento` varchar(255) NOT NULL,
+  `data_inicio` datetime NOT NULL,
+  `data_fim` datetime NOT NULL,
+  `informacoes_complementares` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- odonto.dentista definição
+
+CREATE TABLE `dentista` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(85) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- odonto.despesas definição
+
+CREATE TABLE `despesas` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(255) NOT NULL,
+  `valor` decimal(10,2) NOT NULL,
+  `vencimento` date NOT NULL,
+  `categoria` varchar(100) NOT NULL,
+  `status_pagamento` tinyint(1) NOT NULL,
+  `comprovante` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- odonto.pacientes definição
+
+CREATE TABLE `pacientes` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(150) NOT NULL,
+  `foto` blob,
+  `data_nascimento` date NOT NULL,
+  `sexo` char(1) DEFAULT NULL,
+  `cpf` char(11) NOT NULL,
+  `rg` char(14) DEFAULT NULL,
+  `observacoes` text,
+  `celular` char(11) DEFAULT NULL,
+  `telefone` char(10) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `cep` char(8) DEFAULT NULL,
+  `cidade` varchar(100) DEFAULT NULL,
+  `estado` char(2) DEFAULT NULL,
+  `rua` varchar(150) DEFAULT NULL,
+  `numero` varchar(10) DEFAULT NULL,
+  `complemento` varchar(50) DEFAULT NULL,
+  `bairro` varchar(100) DEFAULT NULL,
+  `nome_responsavel` varchar(150) DEFAULT NULL,
+  `data_nascimento_responsavel` date DEFAULT NULL,
+  `cpf_responsavel` char(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cpf` (`cpf`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- odonto.usuarios definição
+
+CREATE TABLE `usuarios` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `login` varchar(100) NOT NULL,
+  `senha` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `login` (`login`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- odonto.anamneses definição
+
+CREATE TABLE `anamneses` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `paciente_id` int NOT NULL,
+  `doencas_sistemicas` text,
+  `uso_medicamentos` text,
+  `alergia_medicamentos` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `condicao_alergica` text,
+  `cirurgias` text,
+  `tratamento_medico` text,
+  `problemas_sangramento` tinyint(1) DEFAULT NULL,
+  `doencas_transmissiveis` text,
+  `ultima_visita` text,
+  `tratamentos_anteriores` text,
+  `medo_tratamento` tinyint(1) DEFAULT NULL,
+  `dor_desconforto` tinyint(1) DEFAULT NULL,
+  `sensibilidade` tinyint(1) DEFAULT NULL,
+  `sangramento_gengival` tinyint(1) DEFAULT NULL,
+  `mau_halito` tinyint(1) DEFAULT NULL,
+  `bruxismo` tinyint(1) DEFAULT NULL,
+  `roer_unhas` tinyint(1) DEFAULT NULL,
+  `uso_aparelho` tinyint(1) DEFAULT NULL,
+  `tratamento_canal` tinyint(1) DEFAULT NULL,
+  `frequencia_escovacao` varchar(50) DEFAULT NULL,
+  `uso_fio_dental` tinyint(1) DEFAULT NULL,
+  `uso_enxaguante` tinyint(1) DEFAULT NULL,
+  `consumo_acucar` tinyint(1) DEFAULT NULL,
+  `fumante` tinyint(1) DEFAULT NULL,
+  `consumo_alcool` tinyint(1) DEFAULT NULL,
+  `mastiga_chiclete` tinyint(1) DEFAULT NULL,
+  `gravida` tinyint(1) DEFAULT NULL,
+  `amamentando` tinyint(1) DEFAULT NULL,
+  `uso_anticoncepcional` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `paciente_id` (`paciente_id`),
+  CONSTRAINT `anamneses_ibfk_1` FOREIGN KEY (`paciente_id`) REFERENCES `pacientes` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- odonto.tratamento definição
+
+CREATE TABLE `tratamento` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(100) DEFAULT NULL,
+  `data_orcamento` date DEFAULT NULL,
+  `data_aprovacao` date DEFAULT NULL,
+  `valor_total` decimal(10,2) DEFAULT NULL,
+  `valor_parcelas` decimal(10,2) DEFAULT NULL,
+  `orcamento_aprovado` tinyint(1) DEFAULT NULL,
+  `parcelas` int DEFAULT NULL,
+  `paciente_id` int NOT NULL,
+  `data_finalizacao` date DEFAULT NULL,
+  `tratamento_finalizado` tinyint(1) NOT NULL DEFAULT '0',
+  `evolucao` text,
+  PRIMARY KEY (`id`),
+  KEY `paciente_id` (`paciente_id`),
+  CONSTRAINT `tratamento_ibfk_1` FOREIGN KEY (`paciente_id`) REFERENCES `pacientes` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- odonto.parcela definição
+
+CREATE TABLE `parcela` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `valor` decimal(10,2) NOT NULL,
+  `vencimento` date NOT NULL,
+  `status_pagamento` tinyint(1) NOT NULL DEFAULT '0',
+  `tratamento_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_tratamento` (`tratamento_id`),
+  CONSTRAINT `fk_tratamento` FOREIGN KEY (`tratamento_id`) REFERENCES `tratamento` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- odonto.procedimentos_do_tratamento definição
+
+CREATE TABLE `procedimentos_do_tratamento` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `procedimento` varchar(85) DEFAULT NULL,
+  `dente_regiao` varchar(45) DEFAULT NULL,
+  `valor` decimal(10,2) DEFAULT NULL,
+  `status` varchar(45) DEFAULT NULL,
+  `tratamento_id` int NOT NULL,
+  `dentista_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tratamento_id` (`tratamento_id`),
+  KEY `dentista_id` (`dentista_id`),
+  CONSTRAINT `procedimentos_do_tratamento_ibfk_1` FOREIGN KEY (`tratamento_id`) REFERENCES `tratamento` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `procedimentos_do_tratamento_ibfk_2` FOREIGN KEY (`dentista_id`) REFERENCES `dentista` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- odonto.pagamento definição
+
+CREATE TABLE `pagamento` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `forma_pagamento` varchar(50) NOT NULL,
+  `data_recebimento` date NOT NULL,
+  `parcela_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_parcela` (`parcela_id`),
+  CONSTRAINT `fk_parcela` FOREIGN KEY (`parcela_id`) REFERENCES `parcela` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

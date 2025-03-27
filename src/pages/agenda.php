@@ -36,11 +36,6 @@
                     <div class="col-sm-8 col-4">
                         <h4 class="page-title">Agenda</h4>
                     </div>
-                    <div class="col-sm-4 col-8 text-right m-b-30">
-                        <a href="#" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#add_event">
-                            <i class="fa fa-plus"></i> Marcar consulta
-                        </a>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
@@ -75,9 +70,6 @@
                             <label>Paciente</label>
                             <input class="form-control rounded" type="text" name="nome_paciente" id="nome_paciente" placeholder="Nome do paciente">
                         </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <a href="" class="btn btn-primary m-t-30">Novo Paciente</a>
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
